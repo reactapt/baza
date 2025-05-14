@@ -22,7 +22,7 @@ require_once 'config.php';
                         <li><a href="cards.php">Мои карточки</a></li>
                         <li><a href="create-card.php">Добавить книгу</a></li>
                         <?php if ($_SESSION['is_admin']): ?>
-                            <li><a href="admin/index.php">Панель администратора</a></li>
+                            <li><a href="admin.php">Панель администратора</a></li>
                         <?php endif; ?>
                         <li><a href="logout.php">Выйти (<?= htmlspecialchars($_SESSION['login']) ?>)</a></li>
                     <?php else: ?>

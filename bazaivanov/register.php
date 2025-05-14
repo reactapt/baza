@@ -1,9 +1,12 @@
 <?php
 require_once 'includes/config.php';
+require_once 'includes/auth.php';
+
+redirectIfAuth(); // Редирект, если пользователь уже авторизован
+
+$errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $errors = [];
-    
     $full_name = sanitizeInput($_POST['full_name']);
     $phone = sanitizeInput($_POST['phone']);
     $email = sanitizeInput($_POST['email']);
@@ -16,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "ФИО должно содержать только кириллицу и пробелы";
     }
     
-    if (empty($phone) || !preg_match('/^\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}$/', $phone)) {
-        $errors[] = "Телефон должен быть в формате +7(XXX)-XXX-XX-XX";
+    if (empty($phone) || !preg_match('/^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/', $phone)) {
+        $errors[] = "Телефон должен быть в формате +7(XXX)XXX-XX-XX";
     }
     
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -75,6 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация | Буквоежка</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 </head>
 <body>
     <?php include 'includes/header.php'; ?>
@@ -93,22 +98,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="POST" class="registration-form">
             <div class="form-group">
                 <label for="full_name">ФИО:</label>
-                <input type="text" id="full_name" name="full_name" required>
+                <input type="text" id="full_name" name="full_name" required 
+                       value="<?= isset($_POST['full_name']) ? htmlspecialchars($_POST['full_name']) : '' ?>">
             </div>
             
             <div class="form-group">
                 <label for="phone">Телефон:</label>
-                <input type="text" id="phone" name="phone" required placeholder="+7(XXX)-XXX-XX-XX">
+                <input type="tel" id="phone" name="phone" required 
+                       placeholder="+7(XXX)XXX-XX-XX"
+                       pattern="\+7\(\d{3}\)\d{3}-\d{2}-\d{2}"
+                       value="<?= isset($_POST['phone']) ? htmlspecialchars($_POST['phone']) : '' ?>">
+                <small class="form-text">Формат: +7(XXX)XXX-XX-XX</small>
             </div>
             
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" required
+                       value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
             </div>
             
             <div class="form-group">
                 <label for="login">Логин (не менее 6 символов):</label>
-                <input type="text" id="login" name="login" required minlength="6">
+                <input type="text" id="login" name="login" required minlength="6"
+                       value="<?= isset($_POST['login']) ? htmlspecialchars($_POST['login']) : '' ?>">
             </div>
             
             <div class="form-group">
@@ -122,9 +134,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             
             <button type="submit" class="btn">Зарегистрироваться</button>
+            <p class="text-center">Уже зарегистрированы? <a href="login.php">Войдите</a></p>
         </form>
-        
-        <p>Уже зарегистрированы? <a href="index.php">Войдите</a></p>
     </main>
     
     <?php include 'includes/footer.php'; ?>

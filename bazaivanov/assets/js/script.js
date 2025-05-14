@@ -1,7 +1,23 @@
-document.getElementById('phone').addEventListener('input', function (e) {
-    let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-    e.target.value = !x[2] ? x[1] : x[1] + '(' + x[2] + ')' + (x[3] ? '-' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
-});
+    $(document).ready(function() {
+        // Маска для телефона
+        $('#phone').mask('+7(000)000-00-00', {
+            placeholder: '+7(XXX)XXX-XX-XX',
+            clearIfNotMatch: true
+        });
+        
+        // Валидация формы
+        $('form').on('submit', function(e) {
+            const phone = $('#phone').val();
+            const phonePattern = /^\+7\(\d{3}\)\d{3}-\d{2}-\d{2}$/;
+            
+            if (!phonePattern.test(phone)) {
+                alert('Пожалуйста, введите телефон в формате +7(XXX)XXX-XX-XX');
+                e.preventDefault();
+                return false;
+            }
+            return true;
+        });
+    });
 
 document.addEventListener('DOMContentLoaded', function() {
     // Улучшение работы форм на мобильных устройствах

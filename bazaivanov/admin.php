@@ -1,10 +1,10 @@
 <?php
-require_once '../includes/config.php';
-require_once '../includes/auth.php';
+require_once 'includes/config.php';
+require_once 'includes/auth.php';
 
 // Проверка прав администратора
 if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
-    header("Location: ../login.php");
+    header("Location: login.php");
     exit();
 }
 
@@ -58,10 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Панель администратора | Буквоежка</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href=assets/css/style.css">
 </head>
 <body>
-    <?php include '../includes/header.php'; ?>
+    <?php include 'includes/header.php'; ?>
     
     <main class="container">
         <h1>Панель администратора</h1>
@@ -136,6 +136,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </main>
     
-    <?php include '../includes/footer.php'; ?>
+    <?php include 'includes/footer.php'; ?>
 </body>
 </html>
